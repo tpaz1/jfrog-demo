@@ -13,6 +13,8 @@ ARG PIP_PASSWORD
 # Configure APT sources dynamically
 RUN echo "deb [trusted=yes] https://${DEBIAN_USER}:${DEBIAN_PASSWORD}@tompaztrial.jfrog.io/artifactory/debian-virtual-debian focal main" > /etc/apt/sources.list
 
+RUN echo "https://${PIP_USER}:${PIP_PASSWORD}@tompaztrial.jfrog.io/artifactory/api/pypi/python-2-pypi/simple"
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
