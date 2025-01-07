@@ -1,0 +1,41 @@
+name: CI/CD Pipeline with JFrog CLI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout Code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Log in to JFrog Docker registry
+    - name: Configure Docker Authentication
+      run: |
+        echo "${{ secrets.JFROG_PASSWORD }}" | docker login -u "${{ secrets.JFROG_USER }}" https://tompaztrial.jfrog.io --password-stdin
+
+    # Step 3: Build Docker Image
+    - name: Build Docker Image with Secrets
+      run: |
+        docker build \
+          --build-arg PIP_USER=${{ secrets.PIP_USER }} \
+          --build-arg PIP_PASSWORD=${{ secrets.PIP_PASSWORD }} \
+          --build-arg DEBIAN_USER=${{ secrets.DEBIAN_USER }} \
+          --build-arg DEBIAN_PASSWORD=${{ secrets.DEBIAN_PASSWORD }} \
+          -t tompaztrial.jfrog.io/docker-virtual/my-app:${{ github.sha }} .
+      
+    # Step 4: Push Docker Image
+    - name: Push Docker Image to JFrog
+      run: |
+        jfrog rt docker-push tompaztrial.jfrog.io/docker-virtual/my-app:${{ github.sha }} docker-virtual
+
+
+    # Optional Step 5: Scan the Docker Image with JFrog Xray
+    - name: Scan Docker image with JFrog Xray
+      run: |
+        jfrog rt docker-scan my-app:${{ github.sha }}
