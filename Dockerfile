@@ -10,10 +10,8 @@ ARG DEBIAN_PASSWORD
 ARG PIP_USER
 ARG PIP_PASSWORD
 
-
+# Configure APT sources dynamically
 RUN echo "deb [trusted=yes] https://${DEBIAN_USER}:${DEBIAN_PASSWORD}@tompaztrial.jfrog.io/artifactory/debian-virtual-debian focal main" > /etc/apt/sources.list
-
-
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
