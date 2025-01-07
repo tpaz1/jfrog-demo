@@ -7,20 +7,20 @@ ENV PYTHONUNBUFFERED=1
 # Add build arguments for secrets
 ARG DEBIAN_USER
 ARG DEBIAN_PASSWORD
-ARG PIP_USER
-ARG PIP_PASSWORD
+ARG PIPY_USER
+ARG PIPY_PASSWORD
 
 # Configure APT sources dynamically
 RUN echo "deb [trusted=yes] https://${DEBIAN_USER}:${DEBIAN_PASSWORD}@tompaztrial.jfrog.io/artifactory/debian-virtual-debian focal main" > /etc/apt/sources.list
 
-RUN echo "https://${PIP_USER}:${PIP_PASSWORD}@tompaztrial.jfrog.io/artifactory/api/pypi/python-2-pypi/simple"
+RUN echo "https://${PYPI_USER}:${PYPI_PASSWORD}@tompaztrial.jfrog.io/artifactory/api/pypi/python-2-pypi/simple"
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    gcc \
-    python3-dev \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
+gcc \
+python3-dev \
+libffi-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -30,7 +30,7 @@ COPY app.py /app
 COPY requirements.txt /app
 
 # Install Python dependencies
-RUN pip install --index-url=https://${PIP_USER}:${PIP_PASSWORD}@tompaztrial.jfrog.io/artifactory/api/pypi/python-2-pypi/simple --no-cache-dir -r requirements.txt
+RUN pip install --index-url=https://${PYPI_USER}:${PYPI_PASSWORD}@tompaztrial.jfrog.io/artifactory/api/pypi/python-2-pypi/simple --no-cache-dir -r requirements.txt
 
 # Expose port
 EXPOSE 8000
