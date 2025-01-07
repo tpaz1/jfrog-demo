@@ -23,8 +23,8 @@ jobs:
     - name: Build Docker Image with Secrets
       run: |
         docker build \
-          --build-arg PIPY_USER=${{ secrets.PIP_USER }} \
-          --build-arg PIPY_PASSWORD=${{ secrets.PIP_PASSWORD }} \
+          --build-arg PIPY_USER=${{ secrets.PIPY_USER }} \
+          --build-arg PIPY_PASSWORD=${{ secrets.PIPY_PASSWORD }} \
           --build-arg DEBIAN_USER=${{ secrets.DEBIAN_USER }} \
           --build-arg DEBIAN_PASSWORD=${{ secrets.DEBIAN_PASSWORD }} \
           -t tompaztrial.jfrog.io/docker-virtual/my-app:${{ github.sha }} .
