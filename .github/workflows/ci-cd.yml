@@ -26,7 +26,7 @@ jobs:
         env:
           IMAGE_NAME: tompaztrial.jfrog.io/docker-virt-docker/jfrog-docker-example-image:${{ github.run_number }}
         run: |
-          jf docker build --build-arg  -t $IMAGE_NAME .
+          jf docker build --build-arg PIP_USER=${PYPI_USER} --build-arg PIP_PASSWORD=${PYPI_PASSWORD} --build-arg DEBIAN_USER=${DEBIAN_USER} --build-arg DEBIAN_PASSWORD=${DEBIAN_PASSWORD} -t $IMAGE_NAME .
           jf docker push $IMAGE_NAME
           
       - name: Publish Build info With JFrog CLI
